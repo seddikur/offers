@@ -12,6 +12,15 @@ return [
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
     'language' => 'ru-RU',
+    'modules' => [
+        'gridview' =>  [
+            'class' => \kartik\grid\Module::class,
+//            'bsVersion' => '4.x', // or '3.x'
+            // 'downloadAction' => 'gridview/export/download',
+            // 'i18n' => [],
+            // 'exportEncryptSalt' => 'tG85vd1',
+        ]
+    ],
     'components' => [
         'request' => [
             'baseUrl' => '/admin',
