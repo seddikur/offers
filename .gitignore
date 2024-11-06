@@ -36,5 +36,5 @@ phpunit.phar
 /.vagrant
 
 # ignore generated files
-.docker/mysql
+docker/mysql
 
