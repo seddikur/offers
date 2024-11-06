@@ -1,72 +1,63 @@
 <?php
-use yii\helpers\Url;
-use yii\helpers\Html;
-use yii\bootstrap\Modal;
-use kartik\grid\GridView;
-use johnitvn\ajaxcrud\CrudAsset;
-use johnitvn\ajaxcrud\BulkButtonWidget;
 
-/* @var $this yii\web\View */
-/* @var $searchModel common\models\OffersSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
+use common\models\Offers;
+use yii\helpers\Html;
+use yii\helpers\Url;
+use yii\grid\ActionColumn;
+use kartik\grid\GridView;
+use yii\bootstrap4\Modal;
+
+/** @var yii\web\View $this */
+/** @var \common\models\OffersSearch $searchModel */
+/** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->title = 'Offers';
 $this->params['breadcrumbs'][] = $this->title;
-
-CrudAsset::register($this);
-
 ?>
-<style>
-    #main-page-pjax{
-        overflow-x: hidden;
-    }
-</style>
-<?php \yii\widgets\Pjax::begin(['id' => 'main-page-pjax']) ?>
 <div class="offers-index">
-    <div id="ajaxCrudDatatable">
-        <?=GridView::widget([
-            'id'=>'crud-datatable-offers',
-            'dataProvider' => $dataProvider,
-            'filterModel' => $searchModel,
-            'pjax'=>true,
-            'columns' => require(__DIR__.'/_columns.php'),
-            'toolbar'=> [
-                ['content'=>
-                    Html::a('<i class="glyphicon glyphicon-plus"></i> Добавить', ['create'],
-                        ['role'=>'modal-remote','title'=> 'Добавить','class'=>'btn btn-default']).
-                    Html::a('<i class="glyphicon glyphicon-repeat"></i>', [''],
-                        ['data-pjax'=>1, 'class'=>'btn btn-default', 'title'=>'Reset Grid']).
-                    '{toggleData}'.
-                    '{export}'
-                ],
-            ],
-            'striped' => true,
-            'condensed' => true,
-            'responsive' => true,
-            'panel' => [
-                'type' => 'primary',
-                'heading' => '<i class="glyphicon glyphicon-list"></i>',
-                'after'=>BulkButtonWidget::widget([
-                        'buttons'=>Html::a('<i class="glyphicon glyphicon-trash"></i>&nbsp; Удалить все',
-                            ["bulk-delete"] ,
-                            [
-                                "class"=>"btn btn-danger btn-xs",
-                                'role'=>'modal-remote-bulk',
-                                'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
-                                'data-request-method'=>'post',
-                                'data-confirm-title'=>'Are you sure?',
-                                'data-confirm-message'=>'Are you sure want to delete this item'
-                            ]),
-                    ]).
-                    '<div class="clearfix"></div>',
-            ]
-        ])?>
-    </div>
+
+    <h1><?= Html::encode($this->title) ?></h1>
+
+    <p>
+
+        <?= Html::a('Добавить', ['create'],
+            [
+//                'data-toggle' => "modal",
+//                'data-target' => "#ajaxCrudModal",
+                'title' => 'Добавить',
+                'role'=>"modal-remote",
+                'class' => 'btn btn-primary'
+            ]) ?>
+
+    </p>
+
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php \yii\widgets\Pjax::begin(['timeout' => 10000, 'id' => 'offers']) ?>
+    <?= GridView::widget([
+        'id' => 'crud-datatable-offers',
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'columns' => require(__DIR__ . '/_columns.php'),
+        'pjax' => true,
+    ]); ?>
+
+    <?php \yii\widgets\Pjax::end() ?>
 </div>
-<?php \yii\widgets\Pjax::end() ?>
+
+
+<?php Modal::begin([
+    "id" => "ajaxCrudModal",
+    "options" => [
+        "tabindex" => false,
+    ],
+    "footer" => "",// always need it for jquery plugin
+]) ?>
+<?php Modal::end(); ?>
+
 
 <?php
 $script = <<< JS
+ 
 $('#crud-datatable-offers [data-key]').dblclick(function(e){
     if($(e.target).is('td')){
         var id = $(this).data('key');
@@ -109,12 +100,3 @@ JS;
 
 $this->registerJs($script, \yii\web\View::POS_READY);
 ?>
-<?php Modal::begin([
-    "id"=>"ajaxCrudModal",
-    "options" => [
-        "tabindex" => false,
-       'class'=>"fade in",
-    ],
-    "footer"=>"",// always need it for jquery plugin
-])?>
-<?php Modal::end(); ?>

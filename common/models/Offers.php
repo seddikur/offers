@@ -32,12 +32,12 @@ class Offers extends \yii\db\ActiveRecord
         return [
             [['name', 'email', 'create_at'], 'required'],
             [['create_at'], 'safe'],
+            [['name', 'email', 'phone'], 'trim'],
             [['phone'], PhoneInputValidator::class],
             [['name', 'email', 'phone'], 'string', 'max' => 255],
             [['email'], 'unique'],
             ['email', 'email'],
             [['name'], 'match', 'pattern' => '/^([^0-9._=+-,<>@]*)$/'],
-            ['email', 'filter', 'filter'=>'strtolower'],
         ];
     }
 
@@ -55,15 +55,4 @@ class Offers extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function beforeValidate()
-    {
-//        if ($this->isNewRecord) {
-//            $this->create_at = date('Y-m-d');
-//        }
-
-        return parent::beforeValidate();
-    }
 }

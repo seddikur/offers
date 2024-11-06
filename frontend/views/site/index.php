@@ -8,7 +8,3 @@ $this->title = 'Index';
 ?>
 
 
-
-
-    </div>
-</div>

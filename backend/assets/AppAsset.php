@@ -16,11 +16,13 @@ class AppAsset extends AssetBundle
         'css/site.css',
     ];
     public $js = [
+        'js/ModalRemote.js',
+        'js/ajaxcrud.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
-        'yii\bootstrap\BootstrapAsset',
-//        'yii\bootstrap4\BootstrapAsset',
+//        'yii\bootstrap\BootstrapAsset',
+        'yii\bootstrap4\BootstrapAsset',
         BootstrapIconAsset::class
     ];
 }
