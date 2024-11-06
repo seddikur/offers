@@ -2,8 +2,13 @@
 
 use yii\helpers\Html;
 
-$this->title = 'index';
-
+$this->title = 'Index';
 
 
 ?>
+
+
+
+
+    </div>
+</div>

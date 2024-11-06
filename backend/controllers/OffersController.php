@@ -30,6 +30,16 @@ class OffersController extends Controller
                     'bulk-delete' => ['post'],
                 ],
             ],
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'except' => ['application-form'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -41,6 +51,9 @@ class OffersController extends Controller
     {    
         $searchModel = new OffersSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->pagination = [
+            'pageSize' => 10
+        ];
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -97,17 +110,17 @@ class OffersController extends Controller
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
+                    'footer'=> Html::button('Закрыть',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                                Html::button('Сохранить',['class'=>'btn btn-primary','type'=>"submit"])
         
                 ];         
             }else if($model->load($request->post()) && $model->save()){
                 return [
-                    'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Create new Offers",
-                    'content'=>'<span class="text-success">Create Offers success</span>',
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a('Create More',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
+                    'forceReload'=>'#crud-datatable-offers-pjax',
+                    'title'=> "Новая запись",
+                    'content'=>'<span class="text-success">Запись успешно добавлена</span>',
+                    'footer'=> Html::button('Закрыть',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                            Html::a('Добавить еще',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
         
                 ];         
             }else{           
