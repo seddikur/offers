@@ -12,6 +12,14 @@ use yii\bootstrap4\NavBar;
 
 AppAsset::register($this);
 ?>
+    <style>
+        body{
+            font-size: 16px!important;
+        }
+        .btn {
+            font-size: 16px!important;
+        }
+    </style>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>" class="h-100">

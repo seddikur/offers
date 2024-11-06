@@ -16,18 +16,23 @@ $this->params['breadcrumbs'][] = $this->title;
 CrudAsset::register($this);
 
 ?>
-
+<style>
+    #main-page-pjax{
+        overflow-x: hidden;
+    }
+</style>
+<?php \yii\widgets\Pjax::begin(['id' => 'main-page-pjax']) ?>
 <div class="offers-index">
     <div id="ajaxCrudDatatable">
         <?=GridView::widget([
-            'id'=>'crud-datatable',
+            'id'=>'crud-datatable-offers',
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
             'pjax'=>true,
             'columns' => require(__DIR__.'/_columns.php'),
             'toolbar'=> [
                 ['content'=>
-                    Html::a('<i class="glyphicon glyphicon-plus"></i>', ['create'],
+                    Html::a('<i class="glyphicon glyphicon-plus"></i> Добавить', ['create'],
                         ['role'=>'modal-remote','title'=> 'Добавить','class'=>'btn btn-default']).
                     Html::a('<i class="glyphicon glyphicon-repeat"></i>', [''],
                         ['data-pjax'=>1, 'class'=>'btn btn-default', 'title'=>'Reset Grid']).
@@ -42,7 +47,7 @@ CrudAsset::register($this);
                 'type' => 'primary',
                 'heading' => '<i class="glyphicon glyphicon-list"></i>',
                 'after'=>BulkButtonWidget::widget([
-                        'buttons'=>Html::a('<i class="glyphicon glyphicon-trash"></i>&nbsp; Delete All',
+                        'buttons'=>Html::a('<i class="glyphicon glyphicon-trash"></i>&nbsp; Удалить все',
                             ["bulk-delete"] ,
                             [
                                 "class"=>"btn btn-danger btn-xs",
@@ -58,16 +63,14 @@ CrudAsset::register($this);
         ])?>
     </div>
 </div>
-<style>
+<?php \yii\widgets\Pjax::end() ?>
 
-
-</style>
 <?php
 $script = <<< JS
 $('#crud-datatable-offers [data-key]').dblclick(function(e){
     if($(e.target).is('td')){
         var id = $(this).data('key');
-        window.location = '/admin/offers/view?id='+id;
+        window.location = '/admin/offers/update?id='+id;
     }
 });
 
@@ -82,7 +85,7 @@ $(document).on('pjax:complete' , function(event) {
     $('#crud-datatable-offers [data-key]').dblclick(function(e){
         if($(e.target).is('td')){
             var id = $(this).data('key');
-            window.location = '/admin/offers/view?id='+id;
+            window.location = '/admin/offers/update?id='+id;
         }
     });
     $(function(){
@@ -92,6 +95,7 @@ $(document).on('pjax:complete' , function(event) {
         });
     });
 });
+
 function convert_to_float(a) {
     var floatValue = +(a);
     return floatValue;
